@@ -64,7 +64,7 @@ def search_github(auth: Github, organization:str, keyword: list) -> list:
                isLicenseURL = "N/A"
             # Internal info is the URL for that specific repo in Microsoft's Internal Open Source Management system. 
             # If you're an authorized user, you can see the direct owners, security groups and internal metadata about the repo.
-            # To search within an organization other than 'Azure', don't forget to edit the URL below accordingly.
+            # You need to provide an organization input, if you want to search a team's repositories.
             if(organization == ""):
                 internalInfo="N/A"
             else:
