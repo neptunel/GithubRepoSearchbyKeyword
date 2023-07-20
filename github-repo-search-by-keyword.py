@@ -32,9 +32,10 @@ def search_github(auth: Github, organization:str, keyword: list) -> list:
     # if no org is specified remove the 'org:{org-name}' from the query
     # the query below searches for the forked repos additionaly. it is optional but use it to get all the related repos.
    
-    if(organization == ''):
+    if(organization == ""):
         query = keyword + 'fork:true:'
-    query =keyword + 'fork:true:' + organization
+    else:
+        query =keyword + 'fork:true: org:' + organization
     results = auth.search_repositories(query, 'stars', 'desc')
 
      # set-up query to saerch all the repos a team owns using the team id - comment down the lines above to use the team based search down below
@@ -64,7 +65,10 @@ def search_github(auth: Github, organization:str, keyword: list) -> list:
             # Internal info is the URL for that specific repo in Microsoft's Internal Open Source Management system. 
             # If you're an authorized user, you can see the direct owners, security groups and internal metadata about the repo.
             # To search within an organization other than 'Azure', don't forget to edit the URL below accordingly.
-            internalInfo = "https://repos.opensource.microsoft.com/orgs/Azure/repos/"+results[repo].name
+            if(organization == ""):
+                internalInfo="N/A"
+            else:
+                internalInfo = "https://repos.opensource.microsoft.com/orgs/"+ organization + "/repos/"+results[repo].name
             results_list.append([results[repo].id, results[repo].name,results[repo].html_url, results[repo].description, results[repo].visibility, results[repo].archived, results[repo].stargazers_count, isLicenseName, isLicenseURL, results[repo].updated_at, results[repo].open_issues_count, topicsList, internalInfo])
             time.sleep(2)
         except RateLimitExceededException:
@@ -76,7 +80,7 @@ def search_github(auth: Github, organization:str, keyword: list) -> list:
 
 @click.command()
 @click.option('--token', prompt='Please enter your GitHub Access Token')
-@click.option('--organization', prompt='Please enter the organziation name in GitHub you want to search repos in. If you do not want to specify an org, leave it blank and hit Enter ', default="")
+@click.option('--organization', prompt='Please enter the organziation name in GitHub you want to search repos in. If you do not want to specify an org, leave it blank and hit Enter', default = "")
 @click.option('--keywords', prompt='Please enter the keywords separated by a comma')
 @click.option('--filename', prompt='Please provide the path of the .csv file you want to save results to')
 def main(token: str, organization:str, keywords: str, filename: str) -> None:
@@ -85,7 +89,6 @@ def main(token: str, organization:str, keywords: str, filename: str) -> None:
     auth = Github(token)
     # search a list of keywords
     search_list = [keyword.strip() for keyword in keywords.split(',')]
-
     # search repositories on GitHub
     github_results = dict()
     for key in search_list:
