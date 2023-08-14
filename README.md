@@ -13,3 +13,6 @@ Script will ask for command line inputs such as:
 
 You can specify the search by adding filters to the query string. You can also search topics, users, code, issues etc. To see which methods PyGithub provides, check [Search API reference](https://pygithub.readthedocs.io/en/latest/github.html#github.MainClass.Github.search_repositories).
 In the script at line 45, there's an example of how to search all the visible(non-secret) repositories a team has using the Team ID. You need to provide an organization input, if you want to search a team's repositories. In additon to the comment about finding the Team ID, you can visit https://repos.opensource.microsoft.com/orgs/{org-name}/teams/{team-name} and find the Team ID at the bottom of the page.
+
+## Demo
+![Demo](./script-demo.gif)
